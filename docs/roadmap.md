@@ -107,12 +107,14 @@ flowchart TD
 
 ---
 
-### Phase 3: StateGraph
+### Phase 3: StateGraph (已完成 - Completed)
 - **Goal**: 引入 LangGraph 核心对象 `StateGraph`，掌握图的创建、State 规约（Reducer）机制与编译（Compile）过程。
 - **Deliverables**:
-  - `state/agent_state.py`: 定义 `AgentState`（TypedDict）及 `add_messages` 规约。
-  - `graph/builder.py`: 基础 `StateGraph` 实例化与编译封装。
-  - `tests/test_state_graph.py`: 测试状态初始化、Reducer 行为与编译后 `CompiledStateGraph`。
+  - `state/agent_state.py`: 定义 `AgentState`（TypedDict）及 `add_messages`、`append_reducer`、`merge_dict_reducer`。
+  - `state/__init__.py`: 规范暴露状态核心类型与规约器函数。
+  - `graph/builder.py`: 基础 `StateGraph` 实例化 `create_agent_graph_builder` 与编译封装 `compile_agent_graph`。
+  - `graph/__init__.py`: 规范暴露图构建与编译契约。
+  - `tests/test_state_graph.py`: 状态字段自省、规约器单元测试、add_messages 行为与编译后 `CompiledStateGraph` 冒烟测试。
 - **Learning Focus**:
   - 为什么 State 是 LangGraph 的核心？
   - Reducer 机制（`Annotated[list, add_messages]` 或自定义规约）如何保证并发一致性与历史增量更新。
@@ -121,8 +123,9 @@ flowchart TD
   - LangGraph: 纯函数式 Reducer，Node 只返回 delta（差量），由框架原子化合并。
 - **Expected Git Diff**: 约 200~350 行核心状态模型与状态图构建代码。
 - **Quality Gate**:
-  - 状态 Reducer 单元测试覆盖率 100%。
-  - `graph.compile()` 无异常，通过基本空图冒烟测试。
+  - 状态 Reducer 单元测试覆盖率 100%（涵盖单元素追加、列表扩展、None 处理、字典合并覆盖、add_messages 原地更新与删除）。[PASS]
+  - `graph.compile()` 无异常，通过基本图生命周期与状态累加调用冒烟测试。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 19 项单元测试通过）。[PASS]
 
 ---
 

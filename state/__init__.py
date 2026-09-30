@@ -6,5 +6,16 @@ Jarvis Agent Pro - 状态语义层 (State Layer)
 保障多分支并发写安全与增量更新一致性。
 """
 
+from state.agent_state import (
+    AgentState,
+    append_reducer,
+    merge_dict_reducer,
+)
+
 __version__ = "0.1.0"
-__all__ = ["__version__"]
+__all__ = [
+    "__version__",
+    "AgentState",
+    "append_reducer",
+    "merge_dict_reducer",
+]
