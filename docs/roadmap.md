@@ -39,7 +39,7 @@ flowchart TD
 
 ## 3. 分阶段详细设计
 
-### Phase 0: Design Gate (当前阶段)
+### Phase 0: Design Gate (已完成 - Completed)
 - **Goal**: 确立系统架构设计、概念迁移映射、状态设计与工程规范，在写入任何生产代码前筑牢架构共识。
 - **Deliverables**:
   - `README.md`
@@ -59,19 +59,20 @@ flowchart TD
   - LangGraph: 显式拓扑结构（Topology）、声明式状态规约（State Reducer）与状态转移约束。
 - **Expected Git Diff**: 文档目录 `docs/` 与 `README.md`，新增纯 Markdown 文档约 1200+ 行，零代码行。
 - **Quality Gate**:
-  - 架构文档齐备，ADR 论证清晰。
-  - 明确从 Loop 到 Graph 的迁移映射无概念模糊。
-  - 评审通过，严禁包含任何 Node/Graph 业务代码。
+  - 架构文档齐备，ADR 论证清晰。[PASS]
+  - 明确从 Loop 到 Graph 的迁移映射无概念模糊。[PASS]
+  - 评审通过，严禁包含任何 Node/Graph 业务代码。[PASS]
 
 ---
 
-### Phase 1: Project Skeleton
+### Phase 1: Project Skeleton (已完成 - Completed)
 - **Goal**: 搭建标准现代化 Python 工程结构，确立包布局、模块隔离与模块依赖边界。
 - **Deliverables**:
   - `pyproject.toml` (定义包元数据与依赖组)
   - `.gitignore` (Python/IDE/uv/checkpoints 过滤规则)
   - 目录包声明：`graph/`、`nodes/`、`state/`、`tools/`、`checkpoints/`、`tests/` 下的 `__init__.py`
   - 基础版本定义与根模块暴露
+  - `tests/test_skeleton.py` (包导入与分层隔离测试)
 - **Learning Focus**:
   - 理解分层图架构的包划分：`state/`（纯数据模型）、`nodes/`（业务计算逻辑）、`graph/`（拓扑组装编排）。
 - **Jarvis 对照**:
@@ -79,8 +80,8 @@ flowchart TD
   - LangGraph: 解耦为图元素与状态系统（`state/`、`nodes/`、`graph/`）。
 - **Expected Git Diff**: 约 100~200 行配置与基础骨架。
 - **Quality Gate**:
-  - `uv sync` 或虚拟环境可正常解析依赖。
-  - 模块导入无循环依赖（Circular Import）。
+  - `uv sync` / `uv run` 环境正常解析并安装依赖。[PASS]
+  - 模块导入无循环依赖（Circular Import），7 项套件测试全绿。[PASS]
 
 ---
 
