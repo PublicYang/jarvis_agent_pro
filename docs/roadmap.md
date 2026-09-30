@@ -129,13 +129,14 @@ flowchart TD
 
 ---
 
-### Phase 4: Nodes
+### Phase 4: Nodes (已完成 - Completed)
 - **Goal**: 实现功能原子化节点（Nodes），将业务与推理逻辑封装为纯函数或异步可调用对象（Callable）。
 - **Deliverables**:
-  - `nodes/base.py`: 节点接口定义与统一错误处理契约。
-  - `nodes/planner.py`: 负责理解意图、规划步骤并生成决策的 Planner 节点。
-  - `nodes/tool_executor.py`: 执行具体工具动作的 Tool Node。
-  - `tests/test_nodes.py`: 针对各节点的隔离单测（Mock LLM/Tools 输入输出）。
+  - `nodes/base.py`: 节点接口定义 `NodeFunction` 与统一异常隔离装饰器 `with_error_boundary`。
+  - `nodes/planner.py`: 负责理解意图、规划步骤并生成决策的 Planner 节点工厂 `create_planner_node`。
+  - `nodes/tool_executor.py`: 执行具体工具动作的 Tool Node 工厂 `create_tool_node`（支持本地工具注册与字典分发）。
+  - `nodes/__init__.py`: 规范暴露节点计算层工厂与契约。
+  - `tests/test_nodes.py`: 针对各节点的隔离单测（全 Mock，覆盖直接答复、工具调用、系统提示词注入、未知工具安全兜底、运行期异常捕获与纯函数无副作用约束）。
 - **Learning Focus**:
   - Node 的输入是完整只读 State 快照，输出是状态增量字典 `Dict[str, Any]`。
   - 节点幂等性与纯函数设计对可靠重试的重要性。
@@ -144,8 +145,9 @@ flowchart TD
   - LangGraph: 每个计算单元退化为 `Node(state) -> partial_state`，具备极高的可测试性与隔离性。
 - **Expected Git Diff**: 约 250~450 行节点实现代码与单元测试。
 - **Quality Gate**:
-  - 节点入参与出参严格契合 `AgentState` 约束。
-  - 所有节点单测通过且无外部网络硬依赖（全 Mock）。
+  - 节点入参与出参严格契合 `AgentState` 约束，无就地修改污染。[PASS]
+  - 所有节点单测通过且无外部网络硬依赖（全 Mock，7 项针对性单测）。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 26 项单元测试全部通过）。[PASS]
 
 ---
 
