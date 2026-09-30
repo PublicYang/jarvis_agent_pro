@@ -171,22 +171,25 @@ flowchart TD
 
 ---
 
-### Phase 6: Conditional Routing
+### Phase 6: Conditional Routing (已完成 - Completed)
 - **Goal**: 实现条件边（Conditional Edge），实现基于状态智能决策的动态分支路由与循环反馈。
 - **Deliverables**:
-  - `graph/router.py`: 路由函数（Router function），根据 Planner 输出决定走向 Tool 还是直接 Finish。
-  - `builder.add_conditional_edges()` 完整接入图拓扑。
-  - `tests/test_conditional_routing.py`: 覆盖分支路由、死循环防护（Max Iterations）测试。
+  - `graph/router.py`: 路由函数 `route_planner_decision` 及目标常量定义 `ROUTER_ACTION_TOOLS`、`ROUTER_ACTION_END`。
+  - `graph/react_graph.py`: 组装完整的 ReAct 自适应闭环图工厂 `build_react_agent_graph`。
+  - `graph/__init__.py`: 规范暴露路由决策器与 ReAct 闭环图构建契约。
+  - `examples/simple_cli.py`: 原型交互式 CLI 演示脚本（涵盖 ReAct 自主推演轨迹与草稿痕迹打印）。
+  - `tests/test_conditional_routing.py`: 条件路由分支覆盖单测、ReAct 端到端完整轨迹单测、无工具直通单测与死循环递归深度熔断测试（4 项单测）。
 - **Learning Focus**:
-  - 条件边函数签名 `router(state) -> Literal["tools", "end"]`。
-  - 基于 Graph 的 ReAct 模式循环闭环机制。
+  - 条件边函数签名 `router(state) -> Literal["tool_executor", "end"]`。
+  - 基于 Graph 的 ReAct 模式循环闭环机制与 Pregel 终止条件。
 - **Jarvis 对照**:
   - Jarvis: `if response.has_tool_call: execute(); continue; else: break` 侵入式控制流。
   - LangGraph: 声明式条件路由，清晰分离“状态决策”与“分支跳转”。
 - **Expected Git Diff**: 约 250~400 行条件路由、循环控制与测试。
 - **Quality Gate**:
-  - 条件覆盖包含工具调用、直接回复、异常降级分支。
-  - 循环调用具备最大递归深度保护机制（Recursion Limit / Safety Guard）。
+  - 条件覆盖包含工具调用、直接回复、异常降级分支。[PASS]
+  - 循环调用具备最大递归深度保护机制（`GraphRecursionError` 熔断验证）。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 36 项单元测试全部通过）。[PASS]
 
 ---
 
