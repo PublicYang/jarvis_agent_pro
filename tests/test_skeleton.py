@@ -4,6 +4,7 @@ Phase 1 测试: 验证项目骨架、包定义、模块边界与导入连通性
 
 import importlib
 import sys
+
 import pytest
 
 CORE_PACKAGES = [
@@ -16,7 +17,7 @@ CORE_PACKAGES = [
 
 
 @pytest.mark.parametrize("package_name", CORE_PACKAGES)
-def test_package_importability(package_name: str):
+def test_package_importability(package_name: str) -> None:
     """验证核心分层包均可被正常导入，不存在语法错误或路径中断"""
     module = importlib.import_module(package_name)
     assert module is not None
@@ -26,7 +27,7 @@ def test_package_importability(package_name: str):
     assert len(module.__doc__.strip()) > 0
 
 
-def test_circular_imports():
+def test_circular_imports() -> None:
     """验证模块间没有产生任何循环导入"""
     # 模拟重载测试循环依赖
     for pkg in CORE_PACKAGES:
@@ -36,13 +37,13 @@ def test_circular_imports():
         assert mod is not None
 
 
-def test_layer_boundary_declarations():
+def test_layer_boundary_declarations() -> None:
     """验证分层包的语义定位与文档契约匹配"""
+    import checkpoints
     import graph
     import nodes
     import state
     import tools
-    import checkpoints
 
     assert "图拓扑" in graph.__doc__
     assert "节点计算" in nodes.__doc__

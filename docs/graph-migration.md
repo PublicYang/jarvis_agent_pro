@@ -47,10 +47,7 @@
   builder.add_node("planner", planner_node)
   builder.add_node("tools", tool_node)
   builder.add_edge("tools", "planner")
-  builder.add_conditional_edges("planner", should_continue, {
-      "continue": "tools",
-      "end": END
-  })
+  builder.add_conditional_edges("planner", should_continue, {"continue": "tools", "end": END})
   graph = builder.compile()
   graph.invoke(initial_state)
   ```
@@ -118,6 +115,7 @@
             return "human_approval"
         return "tools"
 
+
     builder.add_conditional_edges("planner", route_decision)
     ```
 
@@ -147,9 +145,10 @@
   from typing_extensions import TypedDict
   from langgraph.graph.message import add_messages
 
+
   class AgentState(TypedDict):
       messages: Annotated[list, add_messages]  # 使用预置的消息合并规约
-      scratchpad: Annotated[list[str], append_reducer] # 自定义追加规约
+      scratchpad: Annotated[list[str], append_reducer]  # 自定义追加规约
       current_phase: str  # 默认无 Reducer: 直接覆盖替换
   ```
 - 节点返回 `{"messages": [new_msg]}`，框架调用 Reducer 按照规则进行合并（根据 ID 增量追加或就地更新）。
@@ -180,10 +179,9 @@
   # 在节点内动态触发中断
   def human_approval_node(state: AgentState):
       # 挂起图执行，并向外暴露当前审查载荷
-      approval = interrupt({
-          "question": "是否允许执行 Shell 命令?",
-          "command": state["pending_command"]
-      })
+      approval = interrupt(
+          {"question": "是否允许执行 Shell 命令?", "command": state["pending_command"]}
+      )
       if not approval.get("approved"):
           return {"messages": [AIMessage(content="操作被用户拒绝。")]}
       return {"messages": [AIMessage(content="操作已核准，继续执行。")]}
@@ -218,7 +216,9 @@
 - 原生支持**时间旅行（Time Travel）**：
   ```python
   # 随时获取历史上的任意一个检查点
-  historical_state = graph.get_state(config={"configurable": {"thread_id": "1", "checkpoint_id": "step-3"}})
+  historical_state = graph.get_state(
+      config={"configurable": {"thread_id": "1", "checkpoint_id": "step-3"}}
+  )
   # 基于该历史检查点修改参数，开启一条全新的推演分支
   graph.invoke(Command(update={"query": "修正后的目标"}), config=historical_config)
   ```
@@ -266,10 +266,7 @@
 - 依赖手写 `asyncio.gather` 或线程池：
   ```python
   # Jarvis 手工异步调度
-  results = await asyncio.gather(
-      tool_a.run(param_a),
-      tool_b.run(param_b)
-  )
+  results = await asyncio.gather(tool_a.run(param_a), tool_b.run(param_b))
   for r in results:
       merge_to_state(state, r)
   ```

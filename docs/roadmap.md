@@ -85,13 +85,14 @@ flowchart TD
 
 ---
 
-### Phase 2: Development Infrastructure
+### Phase 2: Development Infrastructure (已完成 - Completed)
 - **Goal**: 配置现代化工程工具链，保障代码质量、静态类型检查、代码风格统一以及测试基准。
 - **Deliverables**:
-  - 代码风格与 Linting 工具：`ruff.toml` 或 `pyproject.toml` 中配置 Ruff & Black 规则。
-  - 类型检查配置：`mypy` 或 `pyright` 严格检查。
-  - 测试套件骨架：`tests/conftest.py`，提供基础 mock 与 pytest fixtures。
-  - CI / 校验辅助脚本或 Makefile / Taskfile。
+  - 代码风格与 Linting 工具：`pyproject.toml` 中配置严格的 Ruff (Lint & Black 兼容 Format) 规则。
+  - 类型检查配置：`pyproject.toml` [tool.mypy] 开启严格静态类型校验。
+  - 测试套件骨架：`tests/conftest.py`，提供消息工厂（Human/AI/Tool）与 `RunnableConfig` 线程固件。
+  - 基础设施自检测试：`tests/test_infra.py`，覆盖固件行为、TypedDict 自省与 LangGraph 依赖加载。
+  - 质量门禁自动化脚本：`scripts/check.py`，一键运行 Lint、Format、Mypy、Pytest。
 - **Learning Focus**:
   - TypedDict 与 LangGraph Generic State 的静态类型提示与校验机制。
 - **Jarvis 对照**:
@@ -99,8 +100,10 @@ flowchart TD
   - LangGraph: `StateGraph(state_schema)` 依赖强类型系统在编译期捕获状态不匹配缺陷。
 - **Expected Git Diff**: 约 150~250 行工程配置文件与基础测试环境。
 - **Quality Gate**:
-  - `ruff check .` 与 `ruff format --check .` 100% 通过。
-  - `pytest` 空套件运行无报错。
+  - `ruff check .` 与 `ruff format --check .` 100% 通过。[PASS]
+  - `mypy` 9 个源码文件严格类型推导 100% 通过。[PASS]
+  - `pytest -v` 13 项单元测试全量通过。[PASS]
+  - `scripts/check.py` 一键门禁自动化验证 100% 成功。[PASS]
 
 ---
 

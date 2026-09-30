@@ -69,7 +69,9 @@ from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 
 
-def append_reducer(existing: Optional[List[Any]], update: Optional[Union[Any, List[Any]]]) -> List[Any]:
+def append_reducer(
+    existing: Optional[List[Any]], update: Optional[Union[Any, List[Any]]]
+) -> List[Any]:
     """自定义追加规约器：支持元素单体或列表追加"""
     existing_list = list(existing) if existing else []
     if update is None:
@@ -88,7 +90,7 @@ class AgentState(TypedDict):
     """
     Jarvis Agent Pro 核心图状态模型
     """
-    
+
     # 1. 对话与操作历史 (消息流)
     # 使用 LangGraph 官方成熟的 add_messages 规约
     # 支持根据 ID 增量追加、基于相同 ID 就地覆盖更新、或根据 RemoveMessage 删除
