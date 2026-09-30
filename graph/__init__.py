@@ -16,6 +16,7 @@ from graph.edges import (
     connect_sequence,
     export_mermaid_diagram,
 )
+from graph.hitl_graph import build_hitl_agent_graph
 from graph.react_graph import build_react_agent_graph
 from graph.router import (
     ROUTER_ACTION_END,
@@ -30,6 +31,7 @@ __all__ = [
     "ROUTER_ACTION_TOOLS",
     "START",
     "__version__",
+    "build_hitl_agent_graph",
     "build_linear_agent_graph",
     "build_react_agent_graph",
     "compile_agent_graph",

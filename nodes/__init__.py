@@ -7,14 +7,17 @@ Jarvis Agent Pro - 节点计算层 (Nodes Layer)
 """
 
 from nodes.base import NodeFunction, with_error_boundary
+from nodes.human_approval import DEFAULT_SENSITIVE_TOOLS, create_human_approval_node
 from nodes.planner import create_planner_node
 from nodes.tool_executor import create_tool_node
 
 __version__ = "0.1.0"
 __all__ = [
-    "__version__",
+    "DEFAULT_SENSITIVE_TOOLS",
     "NodeFunction",
-    "with_error_boundary",
+    "__version__",
+    "create_human_approval_node",
     "create_planner_node",
     "create_tool_node",
+    "with_error_boundary",
 ]

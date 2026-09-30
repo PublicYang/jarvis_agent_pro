@@ -193,22 +193,26 @@ flowchart TD
 
 ---
 
-### Phase 7: Interrupt & Resume
+### Phase 7: Interrupt & Resume (已完成 - Completed)
 - **Goal**: 掌握人机协同（Human-in-the-Loop, HITL）机制，实现执行中断（Interrupt）与状态恢复（Resume）。
 - **Deliverables**:
-  - `nodes/human_approval.py`: 人工审批或确认节点，触发中断。
-  - `graph/hitl_graph.py`: 配置 `interrupt_before` / `interrupt_after` 或动态 `interrupt()`。
-  - `tests/test_interrupt_resume.py`: 模拟执行中断、外挂注入人工输入、从中断点无损恢复继续执行。
+  - `nodes/human_approval.py`: 人工审批节点 `create_human_approval_node`，利用 LangGraph 0.2 原生 `interrupt()` 触发无状态挂起与恢复结果解析。
+  - `nodes/base.py`: 异常边界优化，确保控制流信号 `GraphInterrupt` 安全向上传播至图调度引擎。
+  - `nodes/__init__.py`: 规范暴露人工审查节点与高危工具默认清单。
+  - `graph/hitl_graph.py`: 组装人机协同状态图工厂 `build_hitl_agent_graph`（动态路由至 approval / tools / end，支持核准放行与驳回重新规划）。
+  - `graph/__init__.py`: 规范暴露 HITL 图装配入口。
+  - `tests/test_interrupt_resume.py`: 普通工具直通跳过中断、高危敏感操作挂起并冻结快照、`Command(resume={"approved": True})` 唤醒继续执行工具、`Command(resume={"approved": False})` 驳回并反馈给模型重规划（4 项单测）。
 - **Learning Focus**:
-  - 框架如何在不阻塞进程/线程的情况下挂起图执行。
-  - 外部如何通过 `update_state` 修改图状态后发出恢复指令。
+  - 框架如何在不阻塞进程/线程的情况下挂起图执行（基于 `GraphInterrupt` 抛出与持久化冻结）。
+  - 外部如何通过 `Command(resume=...)` 注入人工反馈恢复执行。
 - **Jarvis 对照**:
   - Jarvis: 传统交互往往通过命令行 `input()` 阻塞等待，或者在 Web API 中轮询阻塞线程，难以跨服务恢复。
   - LangGraph: 图在中断边界自动持久化冻结，支持异步、无状态 Web 服务的原生 HITL。
 - **Expected Git Diff**: 约 300~450 行中断恢复逻辑与端到端测试。
 - **Quality Gate**:
-  - 中断发生时，图执行安全暂停且保留全部上下文。
-  - 状态恢复后严格从中断节点继续运行，无重复计算或状态丢失。
+  - 中断发生时，图执行安全暂停且保留全部上下文，敏感工具绝对不被提前执行。[PASS]
+  - 状态恢复后严格从中断节点继续运行，无重复计算或状态丢失（核准/驳回双向验证）。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 40 项单元测试全绿）。[PASS]
 
 ---
 
