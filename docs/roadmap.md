@@ -151,12 +151,12 @@ flowchart TD
 
 ---
 
-### Phase 5: Edges
+### Phase 5: Edges (已完成 - Completed)
 - **Goal**: 掌握静态边（Normal Edge）与图流转，将孤立的 Node 连接成线性和闭环链路。
 - **Deliverables**:
-  - `graph/edges.py`: 边连接逻辑与拓扑声明。
-  - 连接 `START -> planner -> tool_executor -> END` 等静态流程。
-  - `tests/test_static_edges.py`: 静态边拓扑遍历与执行流测试。
+  - `graph/edges.py`: 静态边连接助手 `connect_sequence`、标准线性流图组装 `build_linear_agent_graph` 与 Mermaid 图导出 `export_mermaid_diagram`。
+  - `graph/__init__.py`: 规范导出 `START`、`END` 与静态边连线工具。
+  - `tests/test_static_edges.py`: 静态边序列连接测试、标准线性流端到端测试、无工具流测试、Mermaid 流程图导出校验及非法边连接异常拦截测试。
 - **Learning Focus**:
   - LangGraph 中的特殊常量节点：`START` 与 `END`。
   - 拓扑关系的声明式组装与有向无环/有向有环图的连通性校验。
@@ -165,8 +165,9 @@ flowchart TD
   - LangGraph: `builder.add_edge("node_a", "node_b")`，逻辑流动与执行拓扑彻底解耦。
 - **Expected Git Diff**: 约 200~300 行拓扑组装与拓扑连通测试。
 - **Quality Gate**:
-  - 拓扑校验正确，节点按预期顺序静态推进。
-  - 图可通过 Mermaid 图格式导出验证（`graph.get_graph().draw_mermaid()`）。
+  - 拓扑校验正确，节点按预期顺序静态推进（6 项单测）。[PASS]
+  - 图可通过 Mermaid 图格式导出验证（`graph.get_graph().draw_mermaid()`）。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 32 项单元测试全绿）。[PASS]
 
 ---
 
