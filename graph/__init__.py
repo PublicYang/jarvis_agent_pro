@@ -11,6 +11,7 @@ from graph.builder import (
     compile_agent_graph,
     create_agent_graph_builder,
 )
+from graph.checkpointed_graph import compile_with_checkpointer
 from graph.edges import (
     build_linear_agent_graph,
     connect_sequence,
@@ -35,6 +36,7 @@ __all__ = [
     "build_linear_agent_graph",
     "build_react_agent_graph",
     "compile_agent_graph",
+    "compile_with_checkpointer",
     "connect_sequence",
     "create_agent_graph_builder",
     "export_mermaid_diagram",

@@ -216,22 +216,24 @@ flowchart TD
 
 ---
 
-### Phase 8: Checkpoint
+### Phase 8: Checkpoint (已完成 - Completed)
 - **Goal**: 集成持久化检查点系统（Checkpointer），实现时间旅行（Time Travel）、故障恢复与会话管理。
 - **Deliverables**:
-  - `checkpoints/manager.py`: 抽象 Checkpointer 存储适配（MemorySaver / SqliteSaver）。
-  - `graph/checkpointed_graph.py`: 注入持久化机制，支持基于 `thread_id` 的多租户会话隔离。
-  - `tests/test_checkpoint.py`: 测试状态历史追溯（Get State History）、状态分支分叉（Forking）、回滚重试。
+  - `checkpoints/manager.py`: 检查点适配工厂 `create_memory_saver`、`create_sqlite_saver` 及高级管理器 `CheckpointManager`（提供历史状态快照获取与时间旅行分叉配置）。
+  - `graph/checkpointed_graph.py`: 状态图检查点注入工具 `compile_with_checkpointer`。
+  - `checkpoints/__init__.py`: 规范暴露检查点基础设施层。
+  - `tests/test_checkpoint.py`: 多租户会话隔离测试、超步历史快照追溯、时间旅行（Time Travel）开辟平行分支验证、SQLite 磁盘持久化恢复测试（4 项单测）。
 - **Learning Focus**:
   - Checkpoint、Checkpoint Metadata 与 State Versions 的底层存储结构。
-  - 为什么 Checkpoint 远胜于普通 Chat Memory（它保存了整个状态图的完整系统快照）。
+  - 为什么 Checkpoint 远胜于普通 Chat Memory（它保存了整个状态图的完整系统时空全态快照）。
 - **Jarvis 对照**:
   - Jarvis: 仅存储单维度的 `messages` 列表或简单向量库记忆，无法回溯完整的内部中间变量。
   - LangGraph: 拥有图每一步步进的完整快照，原生支持“时间旅行”与步级审计。
 - **Expected Git Diff**: 约 250~450 行 Checkpointer 配置与历史追溯测试。
 - **Quality Gate**:
-  - 多 `thread_id` 状态严格隔离。
-  - 验证可在任意历史 step 执行分叉执行并产生预期分支。
+  - 多 `thread_id` 状态严格隔离，跨会话互不污染。[PASS]
+  - 验证可在任意历史 step 执行分叉执行并产生预期分支，不破坏主线历史。[PASS]
+  - 全流程门禁校验 100% 通过（Lint, Format, Mypy, 44 项单元测试全绿）。[PASS]
 
 ---
 
