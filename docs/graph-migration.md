@@ -246,7 +246,7 @@
 - **子图（Subgraph）即一等公民**。一个构建好的 `CompiledStateGraph` 可以直接作为父图中的一个普通 `Node` 挂载：
   ```python
   researcher_subgraph = create_researcher_graph().compile()
-  
+
   # 将子图作为父图的一个节点注册
   parent_builder = StateGraph(MainState)
   parent_builder.add_node("researcher", researcher_subgraph)

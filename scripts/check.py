@@ -31,7 +31,7 @@ def main() -> None:
         ("Ruff 格式排版检查 (Format Check)", ["ruff", "format", "--check", "."]),
         (
             "Mypy 严格类型推导检查 (Typecheck)",
-            ["mypy", "graph", "nodes", "state", "tools", "checkpoints", "tests"],
+            ["mypy", "cli", "graph", "nodes", "state", "tools", "checkpoints", "tests"],
         ),
         ("Pytest 自动化测试套件 (Tests)", ["pytest", "-v"]),
     ]

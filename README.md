@@ -81,4 +81,31 @@ Jarvis Agent Pro (声明式 LangGraph 拓扑编排)
 - **测试同步完备**：每个阶段必须编写对应的单元测试与质量验证（Quality Gate）。
 - **完成即停止**：每完成一个 Phase 必须立即停机，输出 Review 报告，等待下一次指令。
 
-> **当前阶段**: **Phase0: Design Gate** 已就绪，等待架构评审通过后进入 Phase1。
+> **当前进展**: **Phase 8 (Checkpoint)** 已就绪，且已成功接入 **Application Layer CLI (jarvis)** 交互式命令行客户端。
+
+---
+
+## 6. CLI 命令行使用指南 (Application Layer CLI)
+
+Jarvis Agent Pro 提供基于 Typer 与 Rich 构建的工业级终端命令行交互工具：
+
+```bash
+# 1. 启动交互式 REPL 会话（支持离线智能 Demo 模型，零 Key 开箱即用）
+uv run jarvis chat --demo
+
+# 2. 单次任务即时推演执行
+uv run jarvis run "帮我计算 25 * 40 + 150" --demo
+
+# 3. 体验人机协同 (HITL) 敏感操作审批拦截
+uv run jarvis run "帮我删除 app.log" --demo
+
+# 4. 查看 SQLite 持久化检查点历史会话
+uv run jarvis sessions
+
+# 5. 连接真实大语言模型 (OpenAI / DeepSeek / Ollama 等兼容服务)
+# 配置环境变量后直接启动：
+export OPENAI_API_KEY="your-api-key"
+export OPENAI_BASE_URL="https://api.deepseek.com/v1"
+export OPENAI_MODEL_NAME="deepseek-chat"
+uv run jarvis chat
+```
