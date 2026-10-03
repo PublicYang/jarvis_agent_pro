@@ -9,6 +9,8 @@
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-black.svg)](https://github.com/astral-sh/ruff)
 [![Tests: pytest](https://img.shields.io/badge/tests-56%20passed-brightgreen.svg)](tests/)
 
+[ 简体中文 ](README.md) | [ English ](README.en.md)
+
 ---
 
 ## 1. Overview (项目概览)
