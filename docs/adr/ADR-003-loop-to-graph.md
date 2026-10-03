@@ -8,7 +8,7 @@
 
 ## 1. 背景 (Context)
 
-在第一代自主智能体设计中，“Runtime Loop”是事实上的标准范式（如 AutoGPT、BabyAGI 以及自研 Jarvis Agent）。其核心是一个命令式的 `while` 循环：
+在第一代自主智能体设计中，“Runtime Loop”是事实上的标准范式（如早期的 AutoGPT、BabyAGI 以及自研第一代 Agent）。其核心是一个命令式的 `while` 循环：
 ```python
 while not finished:
     thought = reason(history)
@@ -26,7 +26,7 @@ while not finished:
 
 ## 2. 决策 (Decision)
 
-我们决定将命令式的 **Runtime Loop** 彻底重构演进为声明式的 **Graph Orchestration（图编排架构）**：
+我们决定在 **AgentGraph** 项目中，将命令式的 **Runtime Loop** 彻底重构演进为声明式的 **Graph Orchestration（图编排架构）**：
 1. **控制流抽象为有向图**:
    - 计算步骤抽象为图节点（Nodes）。
    - 执行转移抽象为图连线（Edges）与条件路由（Conditional Edges）。

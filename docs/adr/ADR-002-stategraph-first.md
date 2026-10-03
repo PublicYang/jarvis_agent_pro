@@ -13,15 +13,15 @@
 这类高层 API 仅需两三行代码即可拉起一个带有工具调用能力的 ReAct 智能体。然而，如果在工程迁移与学习演化中直接使用这些高层黑盒封装，会带来严重的负面后果：
 1. **隐藏状态机本质**: 高层封装隐藏了 `StateGraph` 的初始化、消息规约器（Reducer）的具体合并过程，开发者无法理解状态是如何更新与回退的。
 2. **丧失架构控制权**: 一旦面对复杂的生产需求（例如自定义审批流、复杂分支汇聚、动态修剪历史、嵌套子图），高层 API 无法灵活定制，开发者常常陷入束手无策的境地。
-3. **无法对齐迁移认知**: Jarvis Agent 自研体系中的 `Runtime Loop`、`Planner`、`Memory` 无法与高层黑盒建立清晰的 1-to-1 映射，失去了“Reference Migration”的深层教学与架构演进价值。
+3. **无法对齐迁移认知**: 传统命令式自研体系中的 `Runtime Loop`、`Planner`、`Memory` 无法与高层黑盒建立清晰的 1-to-1 映射，失去了深入探索智能体底座的架构演进价值。
 
 ---
 
 ## 2. 决策 (Decision)
 
-我们决定在 Jarvis Agent Pro 的核心工程演进中，**坚持“StateGraph First”原则**：
-1. **严禁在基础和运行时阶段直接使用黑盒封装**: 不使用 `create_react_agent` 等高度集成的预置类，全部手写 `StateGraph(AgentState)`、`builder.add_node()`、`builder.add_edge()` 和 `builder.add_conditional_edges()`。
-2. **透彻理解底层状态规约机制**: 显式定义 `Annotated` 与 Reducer 规约函数，手动管理状态字典的增量提交与合并。
+我们决定在 **AgentGraph** 的核心工程演进中，**坚持“StateGraph First”原则**：
+1. **严禁在核心底座中直接使用黑盒封装**: 不使用 `create_react_agent` 等高度集成的预置类，全部显式编写 `StateGraph(AgentState)`、`builder.add_node()`、`builder.add_edge()` 和 `builder.add_conditional_edges()`。
+2. **透彻掌握底层状态规约机制**: 显式定义 `Annotated` 与 Reducer 规约函数，手动管理状态字典的增量提交与合并。
 3. **显式编写控制流与条件路由**: 条件边中的路由逻辑（Router）全部由纯 Python 函数显式实现，清晰暴露决策分支。
 
 ---
@@ -41,4 +41,4 @@
 
 ## 4. 未来可能变化 (Future Possibilities)
 
-- 在掌握全部核心原语（Phase0 ~ Phase10）并完成完整迁移验证后，可在 `examples/` 或扩展模块中引入高层封装作为语法糖（Syntactic Sugar）对比展示，但系统核心内核始终保持由原生 `StateGraph` 组装驱动。
+- 在掌握全部核心原语（Phase 0 ~ Phase 10）并完成完整迁移验证后，可在 `examples/` 或扩展模块中引入高层封装作为语法糖对比展示，但系统核心内核始终保持由原生 `StateGraph` 组装驱动。
